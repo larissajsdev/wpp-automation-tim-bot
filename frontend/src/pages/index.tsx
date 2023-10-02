@@ -69,7 +69,7 @@ export default function Home() {
     // Configura um intervalo para chamar a função a cada 5 segundos
     const intervalId = setInterval(() => {
       getCurrentSessionStatus();
-    }, 2000); 
+    }, 2000);
 
     // Limpa o intervalo quando o componente for desmontado
     return () => {
@@ -237,7 +237,7 @@ export default function Home() {
             {(statusSession !== "CONNECTED") && <div className="d-flex flex-column align-items-center justfy-center" >
               {qrcodeImg && <img style={{ maxWidth: "220px" }} src={qrcodeImg} alt="" />}
               <button
-                style={{marginTop: "5px"}}
+                style={{ marginTop: "5px" }}
                 onClick={generateQRCODE}
                 className="link-light text-dark btn-light btn "
                 type="button"

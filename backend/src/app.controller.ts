@@ -29,11 +29,14 @@ export class AppController {
       }),
     }),
   )
-  async uploadFile( @UploadedFile() file: Express.Multer.File) {
+  async uploadFile(@UploadedFile() file: Express.Multer.File) {
     try {
       return await this.appService.upload(file);
     } catch (error1) {
-      throw new HttpException({ error: "Erro interno do servidor", error1}, HttpStatus.INTERNAL_SERVER_ERROR)
+      throw new HttpException(
+        { error: 'Erro interno do servidor', error1 },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
@@ -43,7 +46,7 @@ export class AppController {
       // const result = await sendMessage('----PARAR ROBÔ----');
       // return result;
     } catch (error) {
-      console.log(error)
+      console.log(error);
       return { message: 'Não foi possível pausar o robô', error };
     }
   }
