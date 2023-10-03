@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import {
   ERROR_MESSAGE,
   MESSAGES,
@@ -115,10 +115,7 @@ export class AppService {
                 STATUS: 'CPF INCONCLUSIVO',
               };
               await timer(2);
-              await saveRows([row]).then(async (r) => {
-                sendMessage('-> CPF INCONCLUSIVO');
-                await timer(3);
-              });
+              await saveRows([row]);
             }
           }
 
