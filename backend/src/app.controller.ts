@@ -4,13 +4,11 @@ import {
   HttpException,
   HttpStatus,
   Post,
-  Res,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-// import { sendMessage } from './utils/message.utils';
 import { diskStorage } from 'multer';
 import { BlockingInterceptor } from './interceptors/blocking.interception';
 @Controller()

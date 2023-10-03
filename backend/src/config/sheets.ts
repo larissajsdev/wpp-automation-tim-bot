@@ -11,23 +11,31 @@ const serviceAccountAuth = new JWT({
 
 export async function getSpreadSheet() {
   try {
-    const doc = new GoogleSpreadsheet(process.env.KEY_PLANILHA, serviceAccountAuth);
+    const doc = new GoogleSpreadsheet(
+      process.env.KEY_PLANILHA,
+      serviceAccountAuth,
+    );
     await doc.loadInfo();
     const spreadSheet = doc.sheetsByIndex[0];
     return spreadSheet;
   } catch (error) {
-    Logger.warn("Não foi possível obter dados da planilha", error)
-  throw new HttpException({ error: "Não foi possível carregar os dados da planilha", describe: error.message}, HttpStatus.INTERNAL_SERVER_ERROR)
+    Logger.warn('Não foi possível obter dados da planilha', error);
+    throw new HttpException(
+      {
+        error: 'Não foi possível carregar os dados da planilha',
+        describe: error.message,
+      },
+      HttpStatus.INTERNAL_SERVER_ERROR,
+    );
   }
 }
 
-export async function saveRows(row){
+export async function saveRows(row) {
   const spreadSheet = await getSpreadSheet();
-  await spreadSheet.addRows(row)
-    .then(r => Logger.log(`Cliente salvo com sucesso na planilha`))
-    .catch(r=> {
-      console.log(r)
-      Logger.warn(`Cliente não foi salvo na planilha`)
-    } )
-    
+  await spreadSheet
+    .addRows(row)
+    .then((r) => Logger.log(`[SALVO] na planilha`))
+    .catch((r) => {
+      Logger.warn(`Cliente não foi salvo na planilha`);
+    });
 }

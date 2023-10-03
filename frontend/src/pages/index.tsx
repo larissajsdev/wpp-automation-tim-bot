@@ -88,14 +88,10 @@ export default function Home() {
 
       const statusSessionResponse = await apiWhatsapp.get(`/api/${process.env.NEXT_PUBLIC_API_WPP_SESSION}/status-session`, headersConfig)
       const { status } = statusSessionResponse.data;
-      console.log(status)
 
       setStatusSession(status);
-      console.log(statusSession)
-
 
     } catch (error) {
-      console.log(error)
       setStatusSession("Não foi possível obter o status");
     }
   }

@@ -5,9 +5,9 @@ export function mapearValoresPlanilha(vetor) {
     const mappedItem = {};
 
     for (const key in item) {
-        const mesData = item[key];
-        const mesStr = `${mesData.status} - ${mesData.valor}`;
-        mappedItem[key] = mesStr;
+      const mesData = item[key];
+      const mesStr = `${mesData.status} - ${mesData.valor}`;
+      mappedItem[key] = mesStr;
     }
     mappedArray.push(mappedItem);
   }
@@ -16,15 +16,15 @@ export function mapearValoresPlanilha(vetor) {
 
 export function getFaturasStatusByMeses(objeto) {
   const meses = Object.keys(objeto);
-  let statusGeral = 'paga';  // Supõe que todos os meses estão pagos por padrão
+  let statusGeral = 'paga'; // Supõe que todos os meses estão pagos por padrão
 
   for (const mes of meses) {
     if (objeto[mes].status !== 'PAGA') {
-      statusGeral = 'pendente';  // Se encontrar um mês não pago, altera para pendente
+      statusGeral = 'pendente'; // Se encontrar um mês não pago, altera para pendente
       break;
     }
   }
-  return {STATUS: statusGeral.toUpperCase()};
+  return { STATUS: statusGeral.toUpperCase() };
 }
 
 export function extrairDadosFaturas(message: string) {

@@ -49,7 +49,6 @@ export async function getLastMessageContent() {
   } catch (error) {
     await sendMessage(' ----> NOVA MENSAGEM');
     await timer(2);
-    console.log(error);
   }
 }
 
@@ -66,7 +65,6 @@ export async function getAllMessagesContent() {
     const AllMessagesContent = allMessages.map((message) => message.content);
     return AllMessagesContent;
   } catch (error) {
-    console.log(error);
     Logger.warn(
       'Houve um erro ao fazer chamada http para o wpp connect. Verifique as credenciais ou se a instância está ativa no momento',
     );
@@ -101,7 +99,6 @@ export async function getLastMessage() {
 export async function lastMessagehasPassed30Seconds() {
   try {
     const lastMessage = await getLastMessage();
-    console.log(lastMessage.timestamp + ': TIMESTAMP LAST MESSAGE');
     const currentTimestamp = Math.floor(Date.now() / 1000);
     const timeDifference = currentTimestamp - lastMessage.timestamp;
     return timeDifference > 20;
