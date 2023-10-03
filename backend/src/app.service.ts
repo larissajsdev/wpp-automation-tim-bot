@@ -26,15 +26,9 @@ export class AppService {
   }
 
   async startBot(planos: Array<any>) {
-    console.log(planos);
-    // {
-    //   CODIGO_CLIENTE: 1325216556,
-    //   ORDEM: 11581094034192,
-    //   CPF_CNPJ: 15005392955,
-    //   VENDEDOR: 'NILSON',
-    //   DT_ATIVACAO: '27/05/2023',
-    //   PLANO: 'TIM FIBRA 1 GIGA'
-    // }
+    await clearMessages();
+    await sendMessage('Iniciando Bot...');
+    await timer(5);
 
     let allMessages = await getAllMessagesContent();
 
@@ -45,26 +39,15 @@ export class AppService {
     let lastMessage = allMessages[allMessages.length - 1];
 
     if (spreadSheet.getRows.length > 0) {
-      await spreadSheet
-        .clearRows()
-        .then((result) => console.log('----------LINHAS LIMPAS -------------'))
-        .catch((r) => {
-          console.log('NÃO FOI POSSÍVEL LIMPAR AS LINHAS');
-          console.log(r);
-        });
+      await spreadSheet.clearRows();
     }
 
-    for (let i = 1; i < planos.length - 1; i++) {
+    for (let i = 0; i < planos.length; i++) {
       let progress = 0;
       while (progress < 4) {
         lastMessage = await getLastMessageContent();
         Logger.log(`-> cliente atual: ${i}`);
-        Logger.log(`-> vendedor atual: ${planos[i].VENDEDOR}`);
-        Logger.log(
-          `-> última msg: ${
-            lastMessage ? lastMessage.substring(0, 2) : '[sem ultima msg]'
-          }...`,
-        );
+        Logger.log(`-> vendedor atual: ${planos[i].CPF_CNPJ}`);
 
         if (isFluxPhrase(lastMessage)) {
           Logger.log(`-> mensagem de fluxo? [${isFluxPhrase(lastMessage)}]`);
@@ -72,7 +55,7 @@ export class AppService {
           if (lastMessage.includes(MESSAGES.MESSAGE_OPTIONS)) {
             progress = 1;
             Logger.log(
-              `-> (1) ETAPA: ENVIAR OPÇÃO DESEJADA [${planos[i].VENDEDOR}]`,
+              `-> (1) ETAPA: ENVIAR OPÇÃO DESEJADA [${planos[i].CPF_CNPJ}]`,
             );
             Logger.log(`-> nível atual: [${progress}]`);
             await sendMessage('3');
@@ -85,7 +68,7 @@ export class AppService {
               `-> (2) ETAPA: ENVIAR CPF_CNPJ [${planos[i].VENDEDOR} - ${planos[i].CPF_CNPJ}]`,
             );
             Logger.log(`-> nível atual: [${progress}]`);
-            const CPF_CNPJ = planos[i].CPF_CNPJ.toString();
+            const CPF_CNPJ = planos[i].CPF_CNPJ;
             await sendMessage(CPF_CNPJ);
             await timer(3);
           }
@@ -93,7 +76,7 @@ export class AppService {
           if (lastMessage.includes(MESSAGES.MESSAGE_ADDRESS)) {
             progress = 3;
             Logger.log(
-              `-> (3) ETAPA: CONFIRMAR ENDEREÇO [${planos[i].VENDEDOR} - ${planos[i].CPF_CNPJ}]`,
+              `-> (3) ETAPA: CONFIRMAR ENDEREÇO [${planos[i].CPF_CNPJ}]`,
             );
             Logger.log(`-> nível atual: [${progress}]`);
             await sendMessage('SIM');
@@ -132,12 +115,10 @@ export class AppService {
                 STATUS: 'CPF INCONCLUSIVO',
               };
               await timer(2);
-              console.log(row);
               await saveRows([row]).then(async (r) => {
                 sendMessage('-> CPF INCONCLUSIVO');
                 await timer(3);
               });
-              console.log('cpf inconclusivo');
             }
           }
 
@@ -226,7 +207,6 @@ export class AppService {
             }
           }
         } else {
-          console.log('(3) FORA DO FLUXO');
           await timer(2);
           await sendMessage(' -> PRÓXIMA MENSAGEM ');
           if (lastMessage == ' -> PRÓXIMA MENSAGEM ') {
